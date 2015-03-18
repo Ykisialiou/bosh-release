@@ -1,0 +1,16 @@
+---
+packages:
+- name: timer
+  version: 3154b9db2a0f890dd71bf019528a6b501b7f2a47
+  fingerprint: 3154b9db2a0f890dd71bf019528a6b501b7f2a47
+  sha1: 88182b289c6edac31053e9b8f59d0a316fd59056
+  dependencies: []
+jobs:
+- name: loop
+  version: cfc274cfd13e3169334d333b8898feb7a3e51abe
+  fingerprint: cfc274cfd13e3169334d333b8898feb7a3e51abe
+  sha1: f740367db61e70076b963cd47e73b7c9ed830488
+commit_hash: '00000000'
+uncommitted_changes: false
+name: loop
+version: 0+dev.1

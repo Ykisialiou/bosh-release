@@ -1,0 +1,55 @@
+name: loop-warden
+director_uuid: c6f166bd-ddac-4f7d-9c57-d11c6ad5133b 
+
+releases:
+- name: loop
+  version: latest
+
+compilation:
+  workers: 2
+  network: loop-network
+  reuse_compilation_vms: true
+  cloud_properties:
+    name: random
+
+update:
+  canaries: 1
+  canary_watch_time: 30000-240000
+  update_watch_time: 30000-600000
+  max_in_flight: 3
+
+resource_pools:
+- name: common-resource-pool
+  network: loop-network
+  size: 1
+  stemcell:
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+    version: latest
+  cloud_properties:
+    name: random
+
+networks:
+- name: loop-network
+  subnets:
+  - range: 10.244.1.0/24
+    reserverd: 
+      - 10.244.1.0
+      - 10.244.1.255
+      - 10.244.1.1
+    static:
+      - 10.244.1.2
+
+    cloud_properties:
+      name: random
+
+jobs:
+- name: loop 
+  template: loop
+  instances: 1
+  resource_pool: common-resource-pool
+  persistent_disk: 10240
+  networks:
+    - name: loop-network
+      static_ips:
+        - 10.244.1.2 
+

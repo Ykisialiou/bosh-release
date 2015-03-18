@@ -1,0 +1,546 @@
+
+Director task 49
+I, [2015-03-05T17:02:05.300888 #1748] [0x3ffee793f320]  INFO -- TaskHelper: Director Version: 1.2811.0
+I, [2015-03-05T17:02:05.300986 #1748] [0x3ffee793f320]  INFO -- TaskHelper: Enqueuing task: 49
+I, [2015-03-05 17:02:05 #11365] []  INFO -- DirectorJobRunner: Looking for task with task id 49
+D, [2015-03-05 17:02:05 #11365] [] DEBUG -- DirectorJobRunner: (0.000771s) SELECT * FROM "tasks" WHERE "id" = 49
+I, [2015-03-05 17:02:05 #11365] []  INFO -- DirectorJobRunner: Starting task: 49
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Creating job
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Reading deployment manifest
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Manifest:
+---
+name: loop-warden
+director_uuid: c6f166bd-ddac-4f7d-9c57-d11c6ad5133b
+releases:
+- name: loop
+  version: 0+dev.4
+compilation:
+  workers: 2
+  network: loop-network
+  reuse_compilation_vms: true
+  cloud_properties:
+    name: random
+update:
+  canaries: 1
+  canary_watch_time: 30000-240000
+  update_watch_time: 30000-600000
+  max_in_flight: 3
+resource_pools:
+- name: common-resource-pool
+  network: loop-network
+  size: 1
+  stemcell:
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+    version: 389
+  cloud_properties:
+    name: random
+networks:
+- name: loop-network
+  subnets:
+  - range: 10.244.1.0/24
+    reserverd:
+    - 10.244.1.0
+    - 10.244.1.255
+    - 10.244.1.1
+    static:
+    - 10.244.1.2
+    cloud_properties:
+      name: random
+jobs:
+- name: loop
+  template: loop
+  instances: 1
+  resource_pool: common-resource-pool
+  persistent_disk: 10240
+  networks:
+  - name: loop-network
+    static_ips:
+    - 10.244.1.2
+
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Creating deployment plan
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Deployment plan options: {}
+
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Created deployment plan
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000939s) SELECT * FROM "tasks" WHERE "id" = 49
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Performing task: 49
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000576s) BEGIN
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000675s) UPDATE "tasks" SET "state" = 'processing', "timestamp" = '2015-03-05 17:02:05.394303+0000', "description" = 'create deployment', "result" = NULL, "output" = '/var/vcap/store/director/tasks/49', "checkpoint_time" = '2015-03-05 17:02:05.394379+0000', "type" = 'update_deployment', "username" = 'admin' WHERE ("id" = 49)
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001090s) COMMIT
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Acquiring deployment lock on loop-warden
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Acquiring lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Acquired lock: lock:deployment:loop-warden
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Preparing deployment
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: sending update deployment start event
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: SENT: hm.director.alert {"id":"05f97d83-07cb-43cc-b239-a1805022c497","severity":4,"title":"director - begin update deployment","summary":"Begin update deployment for loop-warden against Director c6f166bd-ddac-4f7d-9c57-d11c6ad5133b","created_at":1425574925}
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Preparing deployment
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding deployment
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.003784s) BEGIN
+D, [2015-03-05 17:02:05 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000832s) SELECT * FROM "deployments" WHERE ("name" = 'loop-warden') LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000731s) SELECT * FROM "deployments"
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000555s) SELECT COUNT(*) AS "count" FROM "deployments" WHERE ("name" = 'loop-warden') LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000731s) INSERT INTO "deployments" ("name") VALUES ('loop-warden') RETURNING *
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001395s) COMMIT
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding releases
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Acquiring release lock: loop
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Acquiring lock: lock:release:loop
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Acquired lock: lock:release:loop
+D, [2015-03-05 17:02:05 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:release:loop
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001407s) SELECT * FROM "releases" WHERE ("name" = 'loop') LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000585s) SELECT * FROM "release_versions" WHERE (("release_versions"."release_id" = 5) AND ("version" = '0+dev.4')) LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Found release `loop/0+dev.4'
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000823s) SELECT "release_versions".* FROM "release_versions" INNER JOIN "deployments_release_versions" ON (("deployments_release_versions"."release_version_id" = "release_versions"."id") AND ("deployments_release_versions"."deployment_id" = 5))
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Binding release `loop/0+dev.4' to deployment `loop-warden'
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001956s) SELECT pg_attribute.attname AS pk FROM pg_class, pg_attribute, pg_index, pg_namespace WHERE pg_class.oid = pg_attribute.attrelid AND pg_class.relnamespace = pg_namespace.oid AND pg_class.oid = pg_index.indrelid AND pg_index.indkey[0] = pg_attribute.attnum AND pg_index.indisprimary = 't' AND pg_class.relname = 'deployments_release_versions'
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001492s) INSERT INTO "deployments_release_versions" ("deployment_id", "release_version_id") VALUES (5, 6) RETURNING "id"
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Deleting lock: lock:release:loop
+D, [2015-03-05 17:02:05 #11365] [] DEBUG -- DirectorJobRunner: Lock renewal thread exiting
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Deleted lock: lock:release:loop
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding existing deployment
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000479s) SELECT * FROM "vms" WHERE ("vms"."deployment_id" = 5)
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Shutting down pool
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding resource pools
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: ResourcePool `common-resource-pool' - Adding idle VM (index=0)
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding stemcells
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000384s) SELECT * FROM "stemcells" WHERE (("name" = 'bosh-warden-boshlite-ubuntu-trusty-go_agent') AND ("version" = '389')) LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000494s) SELECT "deployments".* FROM "deployments" INNER JOIN "deployments_stemcells" ON (("deployments_stemcells"."deployment_id" = "deployments"."id") AND ("deployments_stemcells"."stemcell_id" = 1))
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001334s) SELECT pg_attribute.attname AS pk FROM pg_class, pg_attribute, pg_index, pg_namespace WHERE pg_class.oid = pg_attribute.attrelid AND pg_class.relnamespace = pg_namespace.oid AND pg_class.oid = pg_index.indrelid AND pg_index.indkey[0] = pg_attribute.attnum AND pg_index.indisprimary = 't' AND pg_class.relname = 'deployments_stemcells'
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001220s) INSERT INTO "deployments_stemcells" ("stemcell_id", "deployment_id") VALUES (1, 5) RETURNING "id"
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding templates
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Binding template `loop'
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000820s) SELECT "templates".* FROM "templates" INNER JOIN "release_versions_templates" ON (("release_versions_templates"."template_id" = "templates"."id") AND ("release_versions_templates"."release_version_id" = 6))
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000594s) SELECT "packages".* FROM "packages" INNER JOIN "packages_release_versions" ON (("packages_release_versions"."package_id" = "packages"."id") AND ("packages_release_versions"."release_version_id" = 6))
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Bound template `loop'
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding properties
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding unallocated VMs
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000459s) SELECT * FROM "instances" WHERE (("deployment_id" = 5) AND ("job" = 'loop') AND ("index" = 0)) LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000445s) SELECT COUNT(*) AS "count" FROM "instances" WHERE (("deployment_id" = 5) AND ("job" = 'loop') AND ("index" = 0)) LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000509s) BEGIN
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000611s) INSERT INTO "instances" ("deployment_id", "job", "index", "state") VALUES (5, 'loop', 0, 'started') RETURNING *
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001190s) COMMIT
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: ResourcePool `common-resource-pool' - Adding allocated VM (index=0)
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Binding instance networks
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Compiling and binding packages
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Generating a list of compile tasks
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Job templates `loop/loop' need to run on stemcell `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Checking whether package `timer/260072a1a884c5358e341ad55e2080fc80400d2a' needs to be compiled for stemcell `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000614s) SELECT * FROM "compiled_packages" WHERE (("package_id" = 12) AND ("stemcell_id" = 1) AND ("dependency_key" = '[]')) LIMIT 1
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Package `timer/260072a1a884c5358e341ad55e2080fc80400d2a' needs to be compiled on `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Processing package `timer/260072a1a884c5358e341ad55e2080fc80400d2a' dependencies
+I, [2015-03-05 17:02:05 #11365] [task:49]  INFO -- DirectorJobRunner: Package `timer/260072a1a884c5358e341ad55e2080fc80400d2a' is ready to be compiled for stemcell `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000730s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: Creating new thread
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.004671s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.001106s) SET standard_conforming_strings = ON
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000473s) SET client_min_messages = 'WARNING'
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000485s) SET DateStyle = 'ISO'
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.001560s) SELECT * FROM "tasks" WHERE "id" = 49
+I, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Compiling package `timer/260072a1a884c5358e341ad55e2080fc80400d2a' for stemcell `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+I, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Acquiring compile lock on 12 1
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: Acquiring lock: lock:compile:12:1
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: Acquired lock: lock:compile:12:1
+D, [2015-03-05 17:02:05 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:compile:12:1
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.001215s) SELECT * FROM "compiled_packages" WHERE (("package_id" = 12) AND ("stemcell_id" = 1) AND ("dependency_key" = '[]')) LIMIT 1
+I, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Package `timer/260072a1a884c5358e341ad55e2080fc80400d2a' needs to be compiled on `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000929s) SELECT max("build") FROM "compiled_packages" WHERE (("package_id" = 12) AND ("stemcell_id" = 1)) LIMIT 1
+I, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Creating compilation VM for stemcell `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"create_vm","arguments":["e8aeec9c-f027-4719-94c6-4034f34ac335","ca205829-c09e-4a47-7067-cbe4bb291a80",{"name":"random"},{"loop-network":{"ip":"10.244.1.3","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"]}},null,{}],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000791s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000485s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000678s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000510s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":"8df299c5-9617-410f-75be-2c326a5663ed","error":null,"log":""}, err: , exit_status: pid 11375 exit 0
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.001712s) SELECT COUNT(*) AS "count" FROM "vms" WHERE ("agent_id" = 'e8aeec9c-f027-4719-94c6-4034f34ac335') LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000197s) BEGIN
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000885s) INSERT INTO "vms" ("deployment_id", "agent_id", "env_json", "cid") VALUES (5, 'e8aeec9c-f027-4719-94c6-4034f34ac335', '{}', '8df299c5-9617-410f-75be-2c326a5663ed') RETURNING *
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000958s) COMMIT
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000571s) SELECT * FROM "instances" WHERE ("instances"."vm_id" = 5) LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"set_vm_metadata","arguments":["8df299c5-9617-410f-75be-2c326a5663ed",{"director":"Bosh Lite Director","deployment":"loop-warden"}],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":null,"error":null,"log":""}, err: , exit_status: pid 11590 exit 0
+I, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Configuring compilation VM: 8df299c5-9617-410f-75be-2c326a5663ed
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000479s) SELECT * FROM "vms" WHERE ("agent_id" = 'e8aeec9c-f027-4719-94c6-4034f34ac335') LIMIT 1
+D, [2015-03-05 17:02:05 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: SENT: agent.e8aeec9c-f027-4719-94c6-4034f34ac335 {"method":"ping","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.b80084ae-3d76-4bf4-8481-1527a8d547b3"}
+D, [2015-03-05 17:02:05 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000702s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000701s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000748s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000904s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000636s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001051s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000584s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000873s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000735s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000924s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: SENT: agent.e8aeec9c-f027-4719-94c6-4034f34ac335 {"method":"ping","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.16e37df8-ae6f-4d5d-b102-25af803ddba4"}
+D, [2015-03-05 17:02:06 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.16e37df8-ae6f-4d5d-b102-25af803ddba4 {"value":"pong"}
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000924s) SELECT COUNT(*) AS "count" FROM "vms" WHERE (("agent_id" = 'e8aeec9c-f027-4719-94c6-4034f34ac335') AND ("id" != 5)) LIMIT 1
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000454s) BEGIN
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000668s) UPDATE "vms" SET "apply_spec_json" = '{"deployment":"loop-warden","resource_pool":"package_compiler","networks":{"loop-network":{"ip":"10.244.1.3","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"]}}}' WHERE ("id" = 5)
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.001253s) COMMIT
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: SENT: agent.e8aeec9c-f027-4719-94c6-4034f34ac335 {"method":"apply","arguments":[{"deployment":"loop-warden","resource_pool":"package_compiler","networks":{"loop-network":{"ip":"10.244.1.3","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"]}}}],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.b43ecd64-17fe-499d-bee7-9f9ec148edfd"}
+D, [2015-03-05 17:02:06 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.b43ecd64-17fe-499d-bee7-9f9ec148edfd {"value":{"agent_task_id":"75becc13-560a-4f5f-7185-08a33cfd5c04","state":"running"}}
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: SENT: agent.e8aeec9c-f027-4719-94c6-4034f34ac335 {"method":"get_task","arguments":["75becc13-560a-4f5f-7185-08a33cfd5c04"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.2ed8f7c7-a78b-4a8f-abf9-4d7b892f0373"}
+D, [2015-03-05 17:02:06 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.2ed8f7c7-a78b-4a8f-abf9-4d7b892f0373 {"value":"applied"}
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"set_vm_metadata","arguments":["8df299c5-9617-410f-75be-2c326a5663ed",{"compiling":"timer","director":"Bosh Lite Director","deployment":"loop-warden"}],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":null,"error":null,"log":""}, err: , exit_status: pid 11622 exit 0
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: SENT: agent.e8aeec9c-f027-4719-94c6-4034f34ac335 {"method":"compile_package","arguments":["3a854d7e-9238-44c5-8634-8f3731a7a679","49c6045743170b3c6ed0295c222cd64128decca6","timer","260072a1a884c5358e341ad55e2080fc80400d2a.1",{}],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.ee3a3627-3156-463a-9a2b-e78d55a59b53"}
+D, [2015-03-05 17:02:06 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.ee3a3627-3156-463a-9a2b-e78d55a59b53 {"value":{"agent_task_id":"f8a824b5-414c-42be-6eec-4f6156664d34","state":"running"}}
+D, [2015-03-05 17:02:06 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: SENT: agent.e8aeec9c-f027-4719-94c6-4034f34ac335 {"method":"get_task","arguments":["f8a824b5-414c-42be-6eec-4f6156664d34"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.db00ad36-5940-4372-9815-137b8f028243"}
+D, [2015-03-05 17:02:06 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.db00ad36-5940-4372-9815-137b8f028243 {"value":{"agent_task_id":"f8a824b5-414c-42be-6eec-4f6156664d34","state":"running"}}
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000672s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001006s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000681s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000665s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000785s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000777s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000658s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000853s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000659s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000679s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:07 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: SENT: agent.e8aeec9c-f027-4719-94c6-4034f34ac335 {"method":"get_task","arguments":["f8a824b5-414c-42be-6eec-4f6156664d34"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.0ed0d98e-56f3-42cb-ba2f-8648efcb58bd"}
+D, [2015-03-05 17:02:07 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.0ed0d98e-56f3-42cb-ba2f-8648efcb58bd {"value":{"result":{"blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e"}}}
+D, [2015-03-05 17:02:07 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000898s) SELECT COUNT(*) AS "count" FROM "compiled_packages" WHERE (("package_id" = 12) AND ("stemcell_id" = 1) AND ("dependency_key" = '[]')) LIMIT 1
+D, [2015-03-05 17:02:07 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000732s) SELECT COUNT(*) AS "count" FROM "compiled_packages" WHERE (("package_id" = 12) AND ("stemcell_id" = 1) AND ("build" = 1)) LIMIT 1
+D, [2015-03-05 17:02:07 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.000468s) BEGIN
+D, [2015-03-05 17:02:07 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.001963s) INSERT INTO "compiled_packages" ("package_id", "stemcell_id", "sha1", "build", "blobstore_id", "dependency_key", "dependency_key_sha1") VALUES (12, 1, '6b804e831300f617f2007bb9a9c31f2cbce6628e', 1, '661c0b9a-dd7d-469e-4577-81651f7e7136', '[]', '97d170e1550eee4afc0af065b78cda302a97674c') RETURNING *
+D, [2015-03-05 17:02:07 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: (0.001263s) COMMIT
+I, [2015-03-05 17:02:07 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Uploading to global package cache
+D, [2015-03-05 17:02:08 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: Deleting lock: lock:compile:12:1
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: Lock renewal thread exiting
+D, [2015-03-05 17:02:08 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)] DEBUG -- DirectorJobRunner: Deleted lock: lock:compile:12:1
+I, [2015-03-05 17:02:08 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Finished compiling package `timer/260072a1a884c5358e341ad55e2080fc80400d2a' for stemcell `bosh-warden-boshlite-ubuntu-trusty-go_agent/389'
+I, [2015-03-05 17:02:08 #11365] [compile_package(timer/260072a1a884c5358e341ad55e2080fc80400d2a, bosh-warden-boshlite-ubuntu-trusty-go_agent/389)]  INFO -- DirectorJobRunner: Unblocking dependents of `timer/260072a1a884c5358e341ad55e2080fc80400d2a` for `bosh-warden-boshlite-ubuntu-trusty-go_agent/389`
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: Thread is no longer needed, cleaning up
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000853s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000659s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Shutting down pool
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Creating new thread
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: (0.000495s) SELECT 1 FROM "vms" WHERE ("id" = 5) LIMIT 1
+I, [2015-03-05 17:02:08 #11365] []  INFO -- DirectorJobRunner: Deleting compilation VM: 8df299c5-9617-410f-75be-2c326a5663ed
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"delete_vm","arguments":["8df299c5-9617-410f-75be-2c326a5663ed"],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: External CPI got response: {"result":null,"error":null,"log":""}, err: , exit_status: pid 11649 exit 0
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: (0.000536s) BEGIN
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: (0.000946s) DELETE FROM "vms" WHERE "id" = 5
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: (0.001172s) COMMIT
+D, [2015-03-05 17:02:08 #11365] [] DEBUG -- DirectorJobRunner: Thread is no longer needed, cleaning up
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Shutting down pool
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000617s) SELECT * FROM "tasks" WHERE "id" = 49
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Finished preparing deployment
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Updating deployment
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Binding DNS
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Deleting no longer needed VMs
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: No unneeded vms to delete
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Deleting no longer needed instances
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: No unneeded instances to delete
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Updating resource pools
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Deleting 0 extra VMs
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Deleting 0 outdated idle VMs
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+I, [2015-03-05 17:02:08 #11365] [task:49]  INFO -- DirectorJobRunner: Creating 1 missing VMs
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Creating new thread
+D, [2015-03-05 17:02:08 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+I, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)]  INFO -- DirectorJobRunner: Creating missing VM
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"create_vm","arguments":["a321b538-a767-4178-b04c-4cec4326ad67","ca205829-c09e-4a47-7067-cbe4bb291a80",{"name":"random"},{"loop-network":{"ip":"10.244.1.2","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh"}},null,{}],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":"4dd03036-20bc-4d75-7f23-743bcbae80bb","error":null,"log":""}, err: , exit_status: pid 11709 exit 0
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000653s) SELECT COUNT(*) AS "count" FROM "vms" WHERE ("agent_id" = 'a321b538-a767-4178-b04c-4cec4326ad67') LIMIT 1
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000164s) BEGIN
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000360s) INSERT INTO "vms" ("deployment_id", "agent_id", "env_json", "cid") VALUES (5, 'a321b538-a767-4178-b04c-4cec4326ad67', '{}', '4dd03036-20bc-4d75-7f23-743bcbae80bb') RETURNING *
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.001042s) COMMIT
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000398s) SELECT * FROM "instances" WHERE ("instances"."vm_id" = 6) LIMIT 1
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"set_vm_metadata","arguments":["4dd03036-20bc-4d75-7f23-743bcbae80bb",{"director":"Bosh Lite Director","deployment":"loop-warden"}],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":null,"error":null,"log":""}, err: , exit_status: pid 11917 exit 0
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000495s) SELECT * FROM "vms" WHERE ("agent_id" = 'a321b538-a767-4178-b04c-4cec4326ad67') LIMIT 1
+D, [2015-03-05 17:02:08 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"ping","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.f410b0e0-a636-497c-99a2-14fc6414ca15"}
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"ping","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.ba389e7f-888d-4d5f-8c3c-286a05c272ac"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.ba389e7f-888d-4d5f-8c3c-286a05c272ac {"value":"pong"}
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000919s) SELECT COUNT(*) AS "count" FROM "vms" WHERE (("agent_id" = 'a321b538-a767-4178-b04c-4cec4326ad67') AND ("id" != 6)) LIMIT 1
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000445s) BEGIN
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.000591s) UPDATE "vms" SET "apply_spec_json" = '{"deployment":"loop-warden","resource_pool":{"name":"common-resource-pool","cloud_properties":{"name":"random"},"stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"networks":{"loop-network":{"ip":"10.244.1.2","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh"}}}' WHERE ("id" = 6)
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: (0.001464s) COMMIT
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"apply","arguments":[{"deployment":"loop-warden","resource_pool":{"name":"common-resource-pool","cloud_properties":{"name":"random"},"stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"networks":{"loop-network":{"ip":"10.244.1.2","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh"}}}],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.1d63ac23-592e-4945-84c2-3b5edcca9054"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.1d63ac23-592e-4945-84c2-3b5edcca9054 {"value":{"agent_task_id":"8e3387f4-47ef-42bd-6f80-13eded4f4938","state":"running"}}
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["8e3387f4-47ef-42bd-6f80-13eded4f4938"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.5fc58b88-8b3a-4e5c-aa4a-bc6058b812ac"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.5fc58b88-8b3a-4e5c-aa4a-bc6058b812ac {"value":"applied"}
+D, [2015-03-05 17:02:09 #11365] [create_missing_vm(common-resource-pool, 0/1)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.0d9cfc85-5db1-42d4-9c7b-9ce343664183"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.0d9cfc85-5db1-42d4-9c7b-9ce343664183 {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":null,"release":"","template":"","version":"","sha1":"","blobstore_id":"","templates":null},"packages":{},"configuration_hash":"","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":null,"persistent_disk":0,"rendered_templates_archive":{"sha1":"","blobstore_id":""},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"running","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: Thread is no longer needed, cleaning up
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Shutting down pool
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000559s) SELECT * FROM "tasks" WHERE "id" = 49
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Binding instance VMs
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Creating new thread
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+I, [2015-03-05 17:02:09 #11365] []  INFO -- DirectorJobRunner: Applying partial VM state
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.000604s) SELECT * FROM "vms" WHERE ("agent_id" = 'a321b538-a767-4178-b04c-4cec4326ad67') LIMIT 1
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"apply","arguments":[{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}],"template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"},"packages":{},"configuration_hash":"","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":0,"rendered_templates_archive":{"sha1":"","blobstore_id":""},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"running","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.5022c96f-75b7-4ad9-bfc5-9641c21a052e"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.5022c96f-75b7-4ad9-bfc5-9641c21a052e {"value":{"agent_task_id":"20b688cc-a836-4cf1-4da6-d36e58700a78","state":"running"}}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["20b688cc-a836-4cf1-4da6-d36e58700a78"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.6d84debb-9407-4b01-b79a-a7c76c77a21f"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.6d84debb-9407-4b01-b79a-a7c76c77a21f {"value":"applied"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.000575s) BEGIN
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.000583s) SELECT COUNT(*) AS "count" FROM "vms" WHERE (("agent_id" = 'a321b538-a767-4178-b04c-4cec4326ad67') AND ("id" != 6)) LIMIT 1
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.000571s) UPDATE "vms" SET "apply_spec_json" = '{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}],"template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"},"packages":{},"configuration_hash":"","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":0,"rendered_templates_archive":{"sha1":"","blobstore_id":""},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"running","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}' WHERE ("id" = 6)
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.000502s) SELECT COUNT(*) AS "count" FROM "instances" WHERE (("deployment_id" = 5) AND ("job" = 'loop') AND ("index" = 0) AND ("id" != 7)) LIMIT 1
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.000543s) SELECT COUNT(*) AS "count" FROM "instances" WHERE (("vm_id" = 6) AND ("id" != 7)) LIMIT 1
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.000909s) UPDATE "instances" SET "vm_id" = 6 WHERE ("id" = 7)
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: (0.001154s) COMMIT
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: Thread is no longer needed, cleaning up
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Shutting down pool
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Binding configuration
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Downloading template `loop' (2127497c-cc0d-4f51-a423-62af9e593b74)...
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Template `loop' downloaded to /var/vcap/data/tmp/director/template-e29335e1-f10b-4717-b390-8f5b821e26db (took 0.003219168s)
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001343s) SELECT * FROM "rendered_templates_archives" WHERE ("rendered_templates_archives"."instance_id" = 7) ORDER BY "created_at" DESC LIMIT 1
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000526s) BEGIN
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001129s) INSERT INTO "rendered_templates_archives" ("blobstore_id", "sha1", "content_sha1", "created_at", "instance_id") VALUES ('ffa03388-c42a-440e-847f-e20803bfe4cd', '25d15822bea75e98ec9ffbeb7bbfc4aafccbc890', '887762c88e483af04af0db15be44fe935273a3fb', '2015-03-05 17:02:09.910672+0000', 7) RETURNING *
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001617s) COMMIT
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Updating jobs
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Updating jobs serially: loop
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000698s) SELECT * FROM "tasks" WHERE "id" = 49
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Updating job: loop
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Deleting no longer needed instances
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000865s) SELECT * FROM "persistent_disks" WHERE ("persistent_disks"."instance_id" = 7)
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Found 1 instances to update
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Starting canary update num_canaries=1
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Creating new thread
+I, [2015-03-05 17:02:09 #11365] [task:49]  INFO -- DirectorJobRunner: Waiting for canaries to update
+D, [2015-03-05 17:02:09 #11365] [task:49] DEBUG -- DirectorJobRunner: Waiting for tasks to complete
+D, [2015-03-05 17:02:09 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000951s) SELECT * FROM "vms" WHERE ("agent_id" = 'a321b538-a767-4178-b04c-4cec4326ad67') LIMIT 1
+I, [2015-03-05 17:02:09 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Updating instance loop/0, changes: packages, persistent_disk, configuration
+D, [2015-03-05 17:02:09 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"prepare","arguments":[{"deployment":"loop-warden","job":{"name":"loop","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}],"template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"},"index":0,"networks":{"loop-network":{"ip":"10.244.1.2","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh"}},"resource_pool":{"name":"common-resource-pool","cloud_properties":{"name":"random"},"stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","properties":{},"dns_domain_name":"bosh","persistent_disk":10240,"persistent_disk_pool":{"name":"8057ee93-2fe9-4bd4-bab8-3d0c4a3802eb","disk_size":10240,"cloud_properties":{}},"template_hashes":{"loop":"887762c88e483af04af0db15be44fe935273a3fb"},"rendered_templates_archive":{"blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd","sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890"}}],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.44f2cdeb-93cb-4e88-ae25-93295c52238c"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.44f2cdeb-93cb-4e88-ae25-93295c52238c {"value":{"agent_task_id":"90581a8b-9c63-40b0-463a-5ca59755f982","state":"running"}}
+D, [2015-03-05 17:02:09 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["90581a8b-9c63-40b0-463a-5ca59755f982"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.0baf069e-3b4b-4f27-b2d4-72d2f60dc46f"}
+D, [2015-03-05 17:02:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.0baf069e-3b4b-4f27-b2d4-72d2f60dc46f {"value":{"agent_task_id":"90581a8b-9c63-40b0-463a-5ca59755f982","state":"running"}}
+D, [2015-03-05 17:02:10 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:10 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["90581a8b-9c63-40b0-463a-5ca59755f982"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.2a614ed5-1c5e-45ce-8781-30780f5f8908"}
+D, [2015-03-05 17:02:10 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.2a614ed5-1c5e-45ce-8781-30780f5f8908 {"value":"prepared"}
+D, [2015-03-05 17:02:10 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"drain","arguments":["shutdown",{"deployment":"loop-warden","job":{"name":"loop","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}],"template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"},"index":0,"networks":{"loop-network":{"ip":"10.244.1.2","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh"}},"resource_pool":{"name":"common-resource-pool","cloud_properties":{"name":"random"},"stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","properties":{},"dns_domain_name":"bosh","persistent_disk":10240,"persistent_disk_pool":{"name":"8057ee93-2fe9-4bd4-bab8-3d0c4a3802eb","disk_size":10240,"cloud_properties":{}},"template_hashes":{"loop":"887762c88e483af04af0db15be44fe935273a3fb"},"rendered_templates_archive":{"blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd","sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890"}}],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.5c4b1f8b-4c63-43ed-a063-66069e5a24c4"}
+D, [2015-03-05 17:02:10 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.5c4b1f8b-4c63-43ed-a063-66069e5a24c4 {"value":{"agent_task_id":"e93b0d5a-3561-4cc0-5fc6-eff0949a5585","state":"running"}}
+D, [2015-03-05 17:02:10 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["e93b0d5a-3561-4cc0-5fc6-eff0949a5585"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.ddbb6735-3647-4044-b30f-f8dcb08cd243"}
+D, [2015-03-05 17:02:10 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.ddbb6735-3647-4044-b30f-f8dcb08cd243 {"value":{"agent_task_id":"e93b0d5a-3561-4cc0-5fc6-eff0949a5585","state":"running"}}
+D, [2015-03-05 17:02:11 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["e93b0d5a-3561-4cc0-5fc6-eff0949a5585"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.5e5f1a14-d81c-4a19-86f1-29e525c0b6c1"}
+D, [2015-03-05 17:02:11 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.5e5f1a14-d81c-4a19-86f1-29e525c0b6c1 {"value":0}
+D, [2015-03-05 17:02:11 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000898s) SELECT * FROM "tasks" WHERE "id" = 49
+D, [2015-03-05 17:02:11 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"stop","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.87b46331-4dfe-4b76-94e6-de6213b88452"}
+D, [2015-03-05 17:02:11 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.87b46331-4dfe-4b76-94e6-de6213b88452 {"value":{"agent_task_id":"698d54cc-abd1-4363-54e6-2d6bf4a3f2d2","state":"running"}}
+D, [2015-03-05 17:02:11 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["698d54cc-abd1-4363-54e6-2d6bf4a3f2d2"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.b4b55bbf-0c97-4a82-95b7-949da47721a6"}
+D, [2015-03-05 17:02:11 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.b4b55bbf-0c97-4a82-95b7-949da47721a6 {"value":{"agent_task_id":"698d54cc-abd1-4363-54e6-2d6bf4a3f2d2","state":"running"}}
+D, [2015-03-05 17:02:12 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["698d54cc-abd1-4363-54e6-2d6bf4a3f2d2"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.6221228a-7943-460d-bda5-ffc41f08333d"}
+D, [2015-03-05 17:02:12 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.6221228a-7943-460d-bda5-ffc41f08333d {"value":"stopped"}
+D, [2015-03-05 17:02:12 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000808s) SELECT * FROM "deployments" WHERE ("deployments"."id" = 5) LIMIT 1
+I, [2015-03-05 17:02:12 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Skipping VM update
+I, [2015-03-05 17:02:12 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Skipping network re-configuration
+I, [2015-03-05 17:02:12 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Skipping attaching missing VM
+D, [2015-03-05 17:02:12 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000394s) BEGIN
+D, [2015-03-05 17:02:12 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"create_disk","arguments":[10240,{},"4dd03036-20bc-4d75-7f23-743bcbae80bb"],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":"1168953e-f399-4ab3-7d0a-e09c56466b39","error":null,"log":""}, err: , exit_status: pid 11978 exit 0
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.001427s) SELECT COUNT(*) AS "count" FROM "persistent_disks" WHERE ("disk_cid" = '1168953e-f399-4ab3-7d0a-e09c56466b39') LIMIT 1
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.001025s) INSERT INTO "persistent_disks" ("disk_cid", "active", "instance_id", "size", "cloud_properties_json") VALUES ('1168953e-f399-4ab3-7d0a-e09c56466b39', false, 7, 10240, '{}') RETURNING *
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000974s) COMMIT
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"attach_disk","arguments":["4dd03036-20bc-4d75-7f23-743bcbae80bb","1168953e-f399-4ab3-7d0a-e09c56466b39"],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":null,"error":null,"log":""}, err: , exit_status: pid 11990 exit 0
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"mount_disk","arguments":["1168953e-f399-4ab3-7d0a-e09c56466b39"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.f59d2425-9b62-48d0-96e8-737dc96b5750"}
+D, [2015-03-05 17:02:13 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.f59d2425-9b62-48d0-96e8-737dc96b5750 {"value":{"agent_task_id":"95d64d97-7287-4266-409b-60ff50c97c08","state":"running"}}
+D, [2015-03-05 17:02:13 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["95d64d97-7287-4266-409b-60ff50c97c08"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.51d2f05c-2ef9-48dd-a98a-adfe74d66c5b"}
+D, [2015-03-05 17:02:13 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.51d2f05c-2ef9-48dd-a98a-adfe74d66c5b {"value":{"agent_task_id":"95d64d97-7287-4266-409b-60ff50c97c08","state":"running"}}
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["95d64d97-7287-4266-409b-60ff50c97c08"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.54d4c603-8e36-4c96-b8dd-f0641ed14f3b"}
+D, [2015-03-05 17:02:14 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.54d4c603-8e36-4c96-b8dd-f0641ed14f3b {"value":{}}
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000535s) BEGIN
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000791s) SELECT COUNT(*) AS "count" FROM "persistent_disks" WHERE (("disk_cid" = '1168953e-f399-4ab3-7d0a-e09c56466b39') AND ("id" != 4)) LIMIT 1
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000901s) UPDATE "persistent_disks" SET "active" = true WHERE ("id" = 4)
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.001378s) COMMIT
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: External CPI sending request: {"method":"set_vm_metadata","arguments":["4dd03036-20bc-4d75-7f23-743bcbae80bb",{"director":"Bosh Lite Director","deployment":"loop-warden","job":"loop","index":"0"}],"context":{"director_uuid":"c6f166bd-ddac-4f7d-9c57-d11c6ad5133b"}} with command: /var/vcap/jobs/cpi/bin/cpi
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: External CPI got response: {"result":null,"error":null,"log":""}, err: , exit_status: pid 12031 exit 0
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.002339s) SELECT COUNT(*) AS "count" FROM "vms" WHERE (("agent_id" = 'a321b538-a767-4178-b04c-4cec4326ad67') AND ("id" != 6)) LIMIT 1
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000454s) BEGIN
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000627s) UPDATE "vms" SET "apply_spec_json" = '{"deployment":"loop-warden","job":{"name":"loop","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}],"template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"},"index":0,"networks":{"loop-network":{"ip":"10.244.1.2","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh"}},"resource_pool":{"name":"common-resource-pool","cloud_properties":{"name":"random"},"stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","properties":{},"dns_domain_name":"bosh","persistent_disk":10240,"persistent_disk_pool":{"name":"8057ee93-2fe9-4bd4-bab8-3d0c4a3802eb","disk_size":10240,"cloud_properties":{}},"template_hashes":{"loop":"887762c88e483af04af0db15be44fe935273a3fb"},"rendered_templates_archive":{"blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd","sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890"}}' WHERE ("id" = 6)
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.001041s) COMMIT
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"apply","arguments":[{"deployment":"loop-warden","job":{"name":"loop","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}],"template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"},"index":0,"networks":{"loop-network":{"ip":"10.244.1.2","netmask":"255.255.255.0","cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh"}},"resource_pool":{"name":"common-resource-pool","cloud_properties":{"name":"random"},"stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","properties":{},"dns_domain_name":"bosh","persistent_disk":10240,"persistent_disk_pool":{"name":"8057ee93-2fe9-4bd4-bab8-3d0c4a3802eb","disk_size":10240,"cloud_properties":{}},"template_hashes":{"loop":"887762c88e483af04af0db15be44fe935273a3fb"},"rendered_templates_archive":{"blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd","sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890"}}],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.f85fe902-8f96-4b92-8c90-8eb1add406ff"}
+D, [2015-03-05 17:02:14 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.f85fe902-8f96-4b92-8c90-8eb1add406ff {"value":{"agent_task_id":"684a7336-6a0d-4fb3-67b1-fe1e25636559","state":"running"}}
+D, [2015-03-05 17:02:14 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["684a7336-6a0d-4fb3-67b1-fe1e25636559"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.cfeffd61-f685-4bbd-9f19-6e947c8f3bb3"}
+D, [2015-03-05 17:02:14 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.cfeffd61-f685-4bbd-9f19-6e947c8f3bb3 {"value":{"agent_task_id":"684a7336-6a0d-4fb3-67b1-fe1e25636559","state":"running"}}
+D, [2015-03-05 17:02:15 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:15 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["684a7336-6a0d-4fb3-67b1-fe1e25636559"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.584b2781-7726-4a4e-912f-3ca3615ec276"}
+D, [2015-03-05 17:02:15 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.584b2781-7726-4a4e-912f-3ca3615ec276 {"value":{"agent_task_id":"684a7336-6a0d-4fb3-67b1-fe1e25636559","state":"running"}}
+D, [2015-03-05 17:02:16 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["684a7336-6a0d-4fb3-67b1-fe1e25636559"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.6003bfe6-4b71-4960-9776-a7c65618fe11"}
+D, [2015-03-05 17:02:16 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.6003bfe6-4b71-4960-9776-a7c65618fe11 {"value":{"agent_task_id":"684a7336-6a0d-4fb3-67b1-fe1e25636559","state":"running"}}
+D, [2015-03-05 17:02:17 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["684a7336-6a0d-4fb3-67b1-fe1e25636559"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.6ff69063-fd66-4b04-af5a-6c1e1e430358"}
+D, [2015-03-05 17:02:17 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.6ff69063-fd66-4b04-af5a-6c1e1e430358 {"value":{"agent_task_id":"684a7336-6a0d-4fb3-67b1-fe1e25636559","state":"running"}}
+D, [2015-03-05 17:02:18 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["684a7336-6a0d-4fb3-67b1-fe1e25636559"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.dc897323-7ad2-40a9-b97e-2710a98d92d7"}
+D, [2015-03-05 17:02:18 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.dc897323-7ad2-40a9-b97e-2710a98d92d7 {"value":{"agent_task_id":"684a7336-6a0d-4fb3-67b1-fe1e25636559","state":"running"}}
+D, [2015-03-05 17:02:19 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_task","arguments":["684a7336-6a0d-4fb3-67b1-fe1e25636559"],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.c2b94805-428e-43fa-9f65-794168382755"}
+D, [2015-03-05 17:02:19 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.c2b94805-428e-43fa-9f65-794168382755 {"value":"applied"}
+D, [2015-03-05 17:02:19 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000892s) SELECT * FROM "rendered_templates_archives" WHERE ("rendered_templates_archives"."instance_id" = 7) ORDER BY "created_at" DESC LIMIT 1
+D, [2015-03-05 17:02:19 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: (0.000656s) SELECT * FROM "rendered_templates_archives" WHERE (("rendered_templates_archives"."instance_id" = 7) AND ("id" != 4))
+D, [2015-03-05 17:02:19 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"start","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.da3996eb-8222-49c2-88a7-fe6132d8b228"}
+D, [2015-03-05 17:02:19 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.da3996eb-8222-49c2-88a7-fe6132d8b228 {"value":"started"}
+I, [2015-03-05 17:02:19 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 30.0 seconds to check loop/0 status
+D, [2015-03-05 17:02:20 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:25 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:30 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000595s) BEGIN
+D, [2015-03-05 17:02:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000808s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:02:35.395389+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:02:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.001132s) COMMIT
+D, [2015-03-05 17:02:35 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:40 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:45 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:02:49 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 30.0 seconds
+D, [2015-03-05 17:02:49 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.c9101f53-b634-45f1-8e9a-55f5508079bf"}
+D, [2015-03-05 17:02:49 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.c9101f53-b634-45f1-8e9a-55f5508079bf {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:02:49 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:02:50 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:02:55 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:00 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000541s) BEGIN
+D, [2015-03-05 17:03:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000742s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:03:05.403058+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:03:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.001226s) COMMIT
+D, [2015-03-05 17:03:05 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:10 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:03:12 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:03:12 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.a8323712-835f-4edb-baf3-8188149912e8"}
+D, [2015-03-05 17:03:12 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.a8323712-835f-4edb-baf3-8188149912e8 {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:03:12 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:03:15 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:20 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:25 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:30 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000382s) BEGIN
+D, [2015-03-05 17:03:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000559s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:03:35.407251+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:03:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000943s) COMMIT
+D, [2015-03-05 17:03:35 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:03:36 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:03:36 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.a4348e13-e73a-417b-bc00-aee8c7e1e6b8"}
+D, [2015-03-05 17:03:36 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.a4348e13-e73a-417b-bc00-aee8c7e1e6b8 {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:03:36 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:03:40 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:45 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:50 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:03:55 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:03:59 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:03:59 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.3f16d789-ea89-4d91-b45b-499446c9b880"}
+D, [2015-03-05 17:03:59 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.3f16d789-ea89-4d91-b45b-499446c9b880 {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:03:59 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:04:00 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000526s) BEGIN
+D, [2015-03-05 17:04:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000798s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:04:05.411095+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:04:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.001303s) COMMIT
+D, [2015-03-05 17:04:05 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:10 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:15 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:20 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:04:22 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:04:22 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.170a710e-d822-4a9b-a580-c07d7efdf1a3"}
+D, [2015-03-05 17:04:22 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.170a710e-d822-4a9b-a580-c07d7efdf1a3 {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:04:22 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:04:25 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:30 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000512s) BEGIN
+D, [2015-03-05 17:04:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000743s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:04:35.415841+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:04:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.001118s) COMMIT
+D, [2015-03-05 17:04:35 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:40 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:45 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:04:46 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:04:46 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.85719657-309c-43c3-aba9-589f9467a07d"}
+D, [2015-03-05 17:04:46 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.85719657-309c-43c3-aba9-589f9467a07d {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:04:46 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:04:50 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:04:55 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:00 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000578s) BEGIN
+D, [2015-03-05 17:05:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000746s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:05:05.420238+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:05:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.001271s) COMMIT
+D, [2015-03-05 17:05:05 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:05:09 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:05:09 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.320e7f53-14d0-4510-8228-90f8dc4705bc"}
+D, [2015-03-05 17:05:09 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.320e7f53-14d0-4510-8228-90f8dc4705bc {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:05:09 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:05:10 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:15 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:20 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:25 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:30 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:05:32 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:05:32 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.82423e70-86be-4b0d-add1-520a5e8f92aa"}
+D, [2015-03-05 17:05:32 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.82423e70-86be-4b0d-add1-520a5e8f92aa {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:05:32 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:05:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000515s) BEGIN
+D, [2015-03-05 17:05:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000809s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:05:35.425176+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:05:35 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.001341s) COMMIT
+D, [2015-03-05 17:05:35 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:40 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:45 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:50 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:05:55 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:05:56 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:05:56 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.bc72bfe7-bd47-4818-a6ca-37b3cd4f5386"}
+D, [2015-03-05 17:05:56 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.bc72bfe7-bd47-4818-a6ca-37b3cd4f5386 {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+I, [2015-03-05 17:05:56 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Waiting for 23.333333333333332 seconds to check loop/0 status
+D, [2015-03-05 17:06:00 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:06:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000503s) BEGIN
+D, [2015-03-05 17:06:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.000727s) UPDATE "tasks" SET "checkpoint_time" = '2015-03-05 17:06:05.429793+0000' WHERE ("id" = 49)
+D, [2015-03-05 17:06:05 #11365] [task:49-checkpoint] DEBUG -- DirectorJobRunner: (0.001231s) COMMIT
+D, [2015-03-05 17:06:05 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:06:10 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+D, [2015-03-05 17:06:15 #11365] [] DEBUG -- DirectorJobRunner: Renewing lock: lock:deployment:loop-warden
+I, [2015-03-05 17:06:19 #11365] [canary_update(loop/0)]  INFO -- DirectorJobRunner: Checking if loop/0 has been updated after 23.333333333333332 seconds
+D, [2015-03-05 17:06:19 #11365] [canary_update(loop/0)] DEBUG -- DirectorJobRunner: SENT: agent.a321b538-a767-4178-b04c-4cec4326ad67 {"method":"get_state","arguments":[],"reply_to":"director.60b0967a-2198-40d7-bac4-daf9595eb87c.0c8e3750-cc28-48c8-acfb-e223a5491036"}
+D, [2015-03-05 17:06:19 #11365] [] DEBUG -- DirectorJobRunner: RECEIVED: director.60b0967a-2198-40d7-bac4-daf9595eb87c.0c8e3750-cc28-48c8-acfb-e223a5491036 {"value":{"properties":{"logging":{"max_log_file_size":""}},"job":{"name":"loop","release":"","template":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74","templates":[{"name":"loop","version":"2aae3b70c48ba211dd7ede7c98719345b54b0741","sha1":"bfb5d6356f4861be076ad6d3c41d43c30840c2a6","blobstore_id":"2127497c-cc0d-4f51-a423-62af9e593b74"}]},"packages":{"timer":{"name":"timer","version":"260072a1a884c5358e341ad55e2080fc80400d2a.1","sha1":"6b804e831300f617f2007bb9a9c31f2cbce6628e","blobstore_id":"661c0b9a-dd7d-469e-4577-81651f7e7136"}},"configuration_hash":"887762c88e483af04af0db15be44fe935273a3fb","networks":{"loop-network":{"cloud_properties":{"name":"random"},"default":["dns","gateway"],"dns_record_name":"0.loop.loop-network.loop-warden.bosh","ip":"10.244.1.2","netmask":"255.255.255.0"}},"resource_pool":{"cloud_properties":{"name":"random"},"name":"common-resource-pool","stemcell":{"name":"bosh-warden-boshlite-ubuntu-trusty-go_agent","version":"389"}},"deployment":"loop-warden","index":0,"persistent_disk":10240,"rendered_templates_archive":{"sha1":"25d15822bea75e98ec9ffbeb7bbfc4aafccbc890","blobstore_id":"ffa03388-c42a-440e-847f-e20803bfe4cd"},"agent_id":"a321b538-a767-4178-b04c-4cec4326ad67","bosh_protocol":"1","job_state":"failing","vm":{"name":"4dd03036-20bc-4d75-7f23-743bcbae80bb"},"ntp":{"message":"file missing"}}}
+E, [2015-03-05 17:06:19 #11365] [canary_update(loop/0)] ERROR -- DirectorJobRunner: Error updating canary instance: #<Bosh::Director::AgentJobNotRunning: `loop/0' is not running after update>
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/instance_updater.rb:85:in `update'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:74:in `block (2 levels) in update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_formatter.rb:49:in `with_thread_name'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:72:in `block in update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/event_log.rb:97:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/event_log.rb:97:in `advance_and_track'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:71:in `update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:65:in `block (2 levels) in update_canaries'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:77:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:77:in `block (2 levels) in create_thread'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:63:in `loop'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:63:in `block in create_thread'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/logging-1.8.2/lib/logging/diagnostic_context.rb:323:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/logging-1.8.2/lib/logging/diagnostic_context.rb:323:in `block in create_with_logging_context'
+D, [2015-03-05 17:06:19 #11365] [] DEBUG -- DirectorJobRunner: Worker thread raised exception: `loop/0' is not running after update - /var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/instance_updater.rb:85:in `update'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:74:in `block (2 levels) in update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_formatter.rb:49:in `with_thread_name'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:72:in `block in update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/event_log.rb:97:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/event_log.rb:97:in `advance_and_track'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:71:in `update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:65:in `block (2 levels) in update_canaries'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:77:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:77:in `block (2 levels) in create_thread'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:63:in `loop'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:63:in `block in create_thread'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/logging-1.8.2/lib/logging/diagnostic_context.rb:323:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/logging-1.8.2/lib/logging/diagnostic_context.rb:323:in `block in create_with_logging_context'
+D, [2015-03-05 17:06:19 #11365] [] DEBUG -- DirectorJobRunner: Thread is no longer needed, cleaning up
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: Shutting down pool
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.002706s) SELECT "stemcells".* FROM "stemcells" INNER JOIN "deployments_stemcells" ON (("deployments_stemcells"."stemcell_id" = "stemcells"."id") AND ("deployments_stemcells"."deployment_id" = 5))
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: Deleting lock: lock:deployment:loop-warden
+D, [2015-03-05 17:06:19 #11365] [] DEBUG -- DirectorJobRunner: Lock renewal thread exiting
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: Deleted lock: lock:deployment:loop-warden
+I, [2015-03-05 17:06:19 #11365] [task:49]  INFO -- DirectorJobRunner: sending update deployment error event
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: SENT: hm.director.alert {"id":"bc1103d0-e18e-422f-b46a-c37bec6b8c59","severity":3,"title":"director - error during update deployment","summary":"Error during update deployment for loop-warden against Director c6f166bd-ddac-4f7d-9c57-d11c6ad5133b: #<Bosh::Director::AgentJobNotRunning: `loop/0' is not running after update>","created_at":1425575179}
+E, [2015-03-05 17:06:19 #11365] [task:49] ERROR -- DirectorJobRunner: `loop/0' is not running after update
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/instance_updater.rb:85:in `update'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:74:in `block (2 levels) in update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_formatter.rb:49:in `with_thread_name'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:72:in `block in update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/event_log.rb:97:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/event_log.rb:97:in `advance_and_track'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:71:in `update_canary_instance'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh-director-1.2811.0/lib/bosh/director/job_updater.rb:65:in `block (2 levels) in update_canaries'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:77:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:77:in `block (2 levels) in create_thread'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:63:in `loop'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/bosh_common-1.2811.0/lib/common/thread_pool.rb:63:in `block in create_thread'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/logging-1.8.2/lib/logging/diagnostic_context.rb:323:in `call'
+/var/vcap/packages/director/gem_home/ruby/2.1.0/gems/logging-1.8.2/lib/logging/diagnostic_context.rb:323:in `block in create_with_logging_context'
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000599s) BEGIN
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.000698s) UPDATE "tasks" SET "state" = 'error', "timestamp" = '2015-03-05 17:06:19.563227+0000', "description" = 'create deployment', "result" = '`loop/0'' is not running after update', "output" = '/var/vcap/store/director/tasks/49', "checkpoint_time" = '2015-03-05 17:06:05.429793+0000', "type" = 'update_deployment', "username" = 'admin' WHERE ("id" = 49)
+D, [2015-03-05 17:06:19 #11365] [task:49] DEBUG -- DirectorJobRunner: (0.001253s) COMMIT
+I, [2015-03-05 17:06:19 #11365] []  INFO -- DirectorJobRunner: Task took 4 minutes 14.181194917 seconds to process.
+
+Task 49 error
